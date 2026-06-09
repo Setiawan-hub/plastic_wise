@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -10,43 +11,52 @@
 
 <body>
 
+<h2 id="status">Mulai...</h2>
+
 <div id="webcam-container"></div>
 
 <script>
 
-let webcam;
-
 async function init(){
 
-    webcam = new tmImage.Webcam(
-        300,
-        300,
-        true
-    );
+try{
 
-    await webcam.setup();
+document.getElementById("status").innerHTML =
+"Library berhasil dimuat";
 
-    await webcam.play();
+let webcam = new tmImage.Webcam(
+300,
+300,
+true
+);
 
-    window.requestAnimationFrame(loop);
+document.getElementById("status").innerHTML =
+"Meminta izin kamera";
 
-    document
-        .getElementById("webcam-container")
-        .appendChild(webcam.canvas);
+await webcam.setup();
 
-    if(window.AppInventor){
+document.getElementById("status").innerHTML =
+"Kamera berhasil";
 
-        window.AppInventor.setWebViewString("MODEL_READY");
+await webcam.play();
 
-    }
+document.getElementById("webcam-container")
+.appendChild(webcam.canvas);
+
+if(window.AppInventor){
+
+window.AppInventor.setWebViewString(
+"MODEL_READY"
+);
 
 }
 
-function loop(){
+}catch(err){
 
-    webcam.update();
+document.getElementById("status").innerHTML =
+"ERROR : " + err;
 
-    window.requestAnimationFrame(loop);
+}
 
 }
 
