@@ -1,136 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-
-<meta charset="utf-8">
-
-<script src="tf.min.js"></script>
-<script src="tmImage.min.js"></script>
-
-</head>
 
 <body>
 
-<div id="webcam-container"></div>
+<h2>PlasticWise AI</h2>
+<p>Model sedang dimuat...</p>
 
 <script>
 
-const URL =
-"https://teachablemachine.withgoogle.com/models/DGJNCccZv/";
+setTimeout(function(){
 
-let model;
-let webcam;
-let maxPredictions;
+    if(window.AppInventor){
 
-async function init() {
+        window.AppInventor.setWebViewString("MODEL_READY");
 
-model = await tmImage.load(
-URL + "model.json",
-URL + "metadata.json"
-);
+    }
 
-maxPredictions =
-model.getTotalClasses();
-
-const flip = true;
-
-webcam = new tmImage.Webcam(
-300,
-300,
-flip
-);
-
-await webcam.setup();
-
-await webcam.play();
-
-window.requestAnimationFrame(loop);
-
-document
-.getElementById("webcam-container")
-.appendChild(webcam.canvas);
-
-if(window.AppInventor){
-
-window.AppInventor
-.setWebViewString(
-"MODEL_READY"
-);
-
-}
-
-}
-
-async function loop() {
-
-webcam.update();
-
-await predict();
-
-window.requestAnimationFrame(
-loop
-);
-
-}
-
-let lastResult = "";
-
-async function predict() {
-
-const prediction =
-await model.predict(
-webcam.canvas
-);
-
-let bestClass = "";
-
-let bestProb = 0;
-
-for(let i=0;
-i<prediction.length;
-i++){
-
-if(
-prediction[i].probability
->
-bestProb
-){
-
-bestProb =
-prediction[i].probability;
-
-bestClass =
-prediction[i].className;
-
-}
-
-}
-
-if(
-bestProb > 0.90
-&&
-bestClass != lastResult
-){
-
-lastResult =
-bestClass;
-
-if(window.AppInventor){
-
-window.AppInventor
-.setWebViewString(
-bestClass
-);
-
-}
-
-}
-
-}
-
-init();
+},2000);
 
 </script>
 
 </body>
+
 </html>
