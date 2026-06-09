@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
+<head>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+</head>
 
 <body>
 
-<h2>PlasticWise AI</h2>
-<p>Model sedang dimuat...</p>
+<div id="webcam-container"></div>
 
 <script>
 
-setTimeout(function(){
+let webcam;
+
+async function init(){
+
+    webcam = new tmImage.Webcam(
+        300,
+        300,
+        true
+    );
+
+    await webcam.setup();
+
+    await webcam.play();
+
+    window.requestAnimationFrame(loop);
+
+    document
+        .getElementById("webcam-container")
+        .appendChild(webcam.canvas);
 
     if(window.AppInventor){
 
@@ -16,10 +40,19 @@ setTimeout(function(){
 
     }
 
-},2000);
+}
+
+function loop(){
+
+    webcam.update();
+
+    window.requestAnimationFrame(loop);
+
+}
+
+init();
 
 </script>
 
 </body>
-
 </html>
